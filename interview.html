@@ -6,8 +6,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.0.5/dist/index.js"></script>
-</head>
+  <<script type="module">
+  import Vapi from "https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.0.5/dist/index.js";
+
+  const PUBLIC_KEY = "b6a8e7ba-a59d-4ce4-af73-f0a9b99173d9";
+  const ASSISTANT_ID = "763ce219-2778-46f6-ac49-21fd241b4f56";
+
+  const vapi = new Vapi(PUBLIC_KEY);
+
+  const startBtn = document.getElementById("startBtn");
+  const endBtn = document.getElementById("endBtn");
+  const status = document.getElementById("status");
+
+  let active = false;
+
+  startBtn.addEventListener("click", async () => {
+    try {
+      status.innerText = "Requesting microphone permission...";
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      status.innerText = "Connecting...";
+
+      await vapi.start({
+        assistant: ASSISTANT_ID
+      });
+
+      active = true;
+      startBtn.classList.add("hidden");
+      endBtn.classList.remove("hidden");
+      status.innerText = "Connected. Start speaking.";
+
+    } catch (err) {
+      console.error(err);
+      status.innerText = "Connection failed: " + err.message;
+    }
+  });
+
+  endBtn.addEventListener("click", () => {
+    vapi.stop();
+    active = false;
+    startBtn.classList.remove("hidden");
+    endBtn.classList.add("hidden");
+    status.innerText = "Session ended.";
+  });
+
+  vapi.on("error", (e) => {
+    console.error(e);
+    status.innerText = "VAPI Error: " + e.message;
+  });
+</script>
+
 
 <body class="bg-gradient-to-br from-black via-indigo-900 to-black text-white min-h-screen flex flex-col items-center justify-center px-6">
 
