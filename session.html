@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Session | RoleplayAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- VAPI SDK - handles live voice AI conversation -->
+    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@2.0.5/dist/index.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Animated gradient background - matches landing page */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            position: relative;
+        }
+        
+        /* Animated grid overlay */
+        .grid-overlay {
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            position: absolute;
+            inset: 0;
+            animation: grid-move 20s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Glass morphism cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Pulsing animation for active state */
+        .pulse-ring {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        /* Audio visualizer bars */
+        @keyframes audioBar1 { 0%, 100% { height: 20px; } 50% { height: 60px; } }
+        @keyframes audioBar2 { 0%, 100% { height: 40px; } 50% { height: 80px; } }
+        @keyframes audioBar3 { 0%, 100% { height: 30px; } 50% { height: 50px; } }
+        @keyframes audioBar4 { 0%, 100% { height: 50px; } 50% { height: 70px; } }
+        @keyframes audioBar5 { 0%, 100% { height: 35px; } 50% { height: 60px; } }
+        
+        .audio-bar-1 { animation: audioBar1 0.8s ease-in-out infinite; }
+        .audio-bar-2 { animation: audioBar2 0.7s ease-in-out infinite; }
+        .audio-bar-3 { animation: audioBar3 0.9s ease-in-out infinite; }
+        .audio-bar-4 { animation: audioBar4 0.6s ease-in-out infinite; }
+        .audio-bar-5 { animation: audioBar5 0.75s ease-in-out infinite; }
+        
+        /* Button glow effects */
+        .btn-glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.5),
+                        0 0 40px rgba(34, 197, 94, 0.3);
+        }
+        
+        .btn-glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5),
+                        0 0 40px rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Video container for future Midjourney integration */
+        .video-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+        }
+        
+        /* Placeholder avatar styling */
+        .avatar-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    
+    <!-- Background effects -->
+    <div class="grid-overlay"></div>
+    
+    <!-- Main content -->
+    <div class="relative z-10">
+        
+        <!-- Header -->
+        <header class="pt-6 pb-4">
+            <div class="container mx-auto px-6">
+                <div class="flex justify-between items-center">
+                    <a href="index.html" class="orbitron text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                        ← ROLEPLAYAI
+                    </a>
+                    <div class="text-sm text-gray-400">Interview Practice Session</div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Session Container -->
+        <div class="container mx-auto px-6 py-12">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Session Title -->
+                <div class="text-center mb-8">
+                    <h1 class="orbitron text-3xl md:text-4xl font-bold mb-2">INTERVIEW WITH SARAH</h1>
+                    <p class="text-gray-400">Senior Tech Recruiter • AI-Powered Practice</p>
+                </div>
+                
+                <!-- 
+                    VIDEO/AVATAR CONTAINER
+                    TODO: Replace this with Midjourney-generated video for lip-sync
+                    - Upload MP4 from Midjourney/HeyGen
+                    - Use <video> tag instead of placeholder
+                    - Add controls for play/pause if needed
+                -->
+                <div class="mb-8">
+                    <div class="video-container aspect-video max-w-2xl mx-auto">
+                        <!-- Placeholder avatar - REPLACE THIS with <video src="sarah-video.mp4"></video> -->
+                        <div id="avatarPlaceholder" class="avatar-placeholder w-full h-full">
+                            👩‍💼
+                        </div>
+                        
+                        <!-- Pulsing ring when call is active -->
+                        <div id="activeRing" class="hidden absolute inset-0 border-4 border-blue-400 rounded-2xl pulse-ring"></div>
+                    </div>
+                </div>
+                
+                <!-- Status Display - shows current state -->
+                <div class="glass-card rounded-2xl p-8 mb-6 text-center">
+                    <div id="statusText" class="text-2xl mb-2 orbitron">
+                        Ready to Practice?
+                    </div>
+                    <div id="subStatusText" class="text-gray-400 text-sm">
+                        Click Start Interview to begin your session with Sarah
+                    </div>
+                </div>
+                
+                <!-- Control Buttons -->
+                <div class="flex justify-center gap-4 mb-8">
+                    
+                    <!-- Start Button -->
+                    <button id="startBtn" 
+                            onclick="startInterview()" 
+                            class="px-10 py-4 bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-xl orbitron btn-glow-green transition-all transform hover:scale-105">
+                        ▶ START INTERVIEW
+                    </button>
+                    
+                    <!-- End Button (hidden initially) -->
+                    <button id="endBtn" 
+                            onclick="endInterview()" 
+                            class="hidden px-10 py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-lg rounded-xl orbitron btn-glow-red transition-all transform hover:scale-105">
+                        ■ END INTERVIEW
+                    </button>
+                    
+                </div>
+                
+                <!-- Audio Visualizer (shows when call is active) -->
+                <div id="audioVisualizer" class="hidden mb-8">
+                    <div class="flex justify-center items-end gap-2 h-20 mb-4">
+                        <div class="w-3 bg-blue-500 rounded-full audio-bar-1"></div>
+                        <div class="w-3 bg-purple-500 rounded-full audio-bar-2"></div>
+                        <div class="w-3 bg-blue-500 rounded-full audio-bar-3"></div>
+                        <div class="w-3 bg-purple-500 rounded-full audio-bar-4"></div>
+                        <div class="w-3 bg-blue-500 rounded-full audio-bar-5"></div>
+                    </div>
+                    <p class="text-center text-gray-400 text-sm orbitron">🎤 LISTENING...</p>
+                </div>
+                
+                <!-- Tips Section -->
+                <div class="glass-card rounded-2xl p-8">
+                    <h3 class="orbitron text-xl font-bold mb-4 text-blue-400">💡 INTERVIEW TIPS</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <span>Use the <strong>STAR method</strong>: Situation, Task, Action, Result</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <span>Be <strong>specific</strong> - Sarah will ask for details if you're too vague</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <span>Speak <strong>clearly</strong> and at a normal conversational pace</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <span>Session lasts <strong>6-7 minutes</strong> - just like a real screening</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-400 mt-1">✓</span>
+                            <span>Your <strong>score will be emailed</strong> after the interview</span>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        /* ========================================
+           VAPI CONFIGURATION
+           ======================================== */
+        
+        // Initialize VAPI with your public key
+        const vapi = new Vapi('b6a8e7ba-a59d-4ce4-af73-f0a9b99173d9');
+        
+        // Your VAPI assistant ID (Sarah the recruiter)
+        const ASSISTANT_ID = '763ce219-2778-46f6-ac49-21fd241b4f56';
+        
+        // Track call state
+        let callActive = false;
+        
+        
+        /* ========================================
+           INTERVIEW CONTROL FUNCTIONS
+           ======================================== */
+        
+        async function startInterview() {
+            console.log('🎬 Starting interview...');
+            
+            // Update UI to show loading state
+            updateUI('loading');
+            
+            try {
+                // Start VAPI call with assistant ID
+                await vapi.start(ASSISTANT_ID);
+                
+                callActive = true;
+                updateUI('active');
+                
+                console.log('✅ Interview started successfully');
+                
+            } catch (error) {
+                console.error('❌ Error starting interview:', error);
+                updateUI('error', error.message);
+            }
+        }
+        
+        function endInterview() {
+            console.log('🛑 Ending interview...');
+            
+            // Stop VAPI call
+            vapi.stop();
+            callActive = false;
+            
+            updateUI('ending');
+            
+            // Show completion message after brief delay
+            setTimeout(() => {
+                updateUI('complete');
+                
+                // Reset to ready state after 5 seconds
+                setTimeout(() => {
+                    updateUI('ready');
+                }, 5000);
+            }, 2000);
+        }
+        
+        
+        /* ========================================
+           UI UPDATE FUNCTION
+           ======================================== */
+        
+        function updateUI(state, errorMsg = '') {
+            const statusText = document.getElementById('statusText');
+            const subStatusText = document.getElementById('subStatusText');
+            const startBtn = document.getElementById('startBtn');
+            const endBtn = document.getElementById('endBtn');
+            const audioVisualizer = document.getElementById('audioVisualizer');
+            const activeRing = document.getElementById('activeRing');
+            
+            switch(state) {
+                case 'ready':
+                    statusText.innerHTML = 'Ready to Practice?';
+                    subStatusText.innerHTML = 'Click Start Interview to begin your session with Sarah';
+                    startBtn.classList.remove('hidden');
+                    endBtn.classList.add('hidden');
+                    audioVisualizer.classList.add('hidden');
+                    activeRing.classList.add('hidden');
+                    break;
+                    
+                case 'loading':
+                    statusText.innerHTML = 'Connecting to Sarah...';
+                    subStatusText.innerHTML = 'Please wait while we set up your interview';
+                    startBtn.classList.add('hidden');
+                    endBtn.classList.remove('hidden');
+                    audioVisualizer.classList.remove('hidden');
+                    activeRing.classList.remove('hidden');
+                    break;
+                    
+                case 'active':
+                    statusText.innerHTML = '<span class="text-green-400">● LIVE</span>';
+                    subStatusText.innerHTML = 'Sarah is ready - start speaking when she asks a question';
+                    audioVisualizer.classList.remove('hidden');
+                    activeRing.classList.remove('hidden');
+                    break;
+                    
+                case 'ending':
+                    statusText.innerHTML = 'Interview Ended';
+                    subStatusText.innerHTML = 'Analyzing your performance...';
+                    audioVisualizer.classList.add('hidden');
+                    activeRing.classList.add('hidden');
+                    break;
+                    
+                case 'complete':
+                    statusText.innerHTML = '<span class="text-green-400">Session Complete!</span>';
+                    subStatusText.innerHTML = '📊 Your score will be emailed to you shortly';
+                    break;
+                    
+                case 'error':
+                    statusText.innerHTML = '<span class="text-red-400">Connection Error</span>';
+                    subStatusText.innerHTML = `Error: ${errorMsg}. Please refresh and try again.`;
+                    startBtn.classList.remove('hidden');
+                    endBtn.classList.add('hidden');
+                    audioVisualizer.classList.add('hidden');
+                    activeRing.classList.add('hidden');
+                    break;
+            }
+        }
+        
+        
+        /* ========================================
+           VAPI EVENT LISTENERS
+           These handle real-time updates from VAPI
+           ======================================== */
+        
+        vapi.on('call-start', () => {
+            console.log('📞 Call started');
+            document.getElementById('statusText').innerHTML = '<span class="text-green-400">● LIVE</span>';
+            document.getElementById('subStatusText').innerHTML = 'Sarah is speaking...';
+        });
+        
+        vapi.on('call-end', () => {
+            console.log('📞 Call ended by VAPI');
+            if (callActive) {
+                endInterview();
+            }
+        });
+        
+        vapi.on('speech-start', () => {
+            console.log('🎤 User started speaking');
+            document.getElementById('subStatusText').innerHTML = '🎤 Listening to your answer...';
+        });
+        
+        vapi.on('speech-end', () => {
+            console.log('🎤 User stopped speaking');
+            document.getElementById('subStatusText').innerHTML = '⏳ Processing your response...';
+        });
+        
+        vapi.on('error', (error) => {
+            console.error('❌ VAPI error:', error);
+            updateUI('error', error.message);
+        });
+        
+        /* 
+           TODO - n8n INTEGRATION FOR LIVE RESPONSES:
+           
+           When you want n8n to process responses in real-time:
+           1. Set up webhook in n8n
+           2. Add this code to send user messages to n8n:
+           
+           vapi.on('message', async (message) => {
+               if (message.type === 'transcript' && message.role === 'user') {
+                   // Send to n8n for processing
+                   const response = await fetch('YOUR_N8N_WEBHOOK_URL', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json' },
+                       body: JSON.stringify({
+                           transcript: message.transcript,
+                           timestamp: new Date().toISOString()
+                       })
+                   });
+                   
+                   const data = await response.json();
+                   console.log('n8n response:', data);
+               }
+           });
+        */
+        
+        
+        /* ========================================
+           KEYBOARD SHORTCUTS
+           ======================================== */
+        
+        document.addEventListener('keydown', (e) => {
+            // Spacebar to start (when not active)
+            if (e.code === 'Space' && !callActive) {
+                e.preventDefault();
+                startInterview();
+            }
+            // Escape to end (when active)
+            else if (e.code === 'Escape' && callActive) {
+                e.preventDefault();
+                endInterview();
+            }
+        });
+        
+    </script>
+    
+</body>
+</html>
